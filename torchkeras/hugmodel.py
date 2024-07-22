@@ -20,11 +20,11 @@ class HugModel(torch.nn.Module):
                  label_names=None, feature_names=None):
         """
         Args:
-            net (torch.nn.Module): The neural network model.
-            loss_fn: The loss function for training.
-            metrics_dict (dict): A dictionary of evaluation metrics.
-            label_names (list): List of label names.
-            feature_names (list): List of feature names.
+            net (torch.nn.Module): The neural network model
+            loss_fn: The loss function for training
+            metrics_dict (dict): A dictionary of evaluation metrics
+            label_names (list): List of label names
+            feature_names (list): List of feature names
         """
         super().__init__()
         self.net, self.loss_fn = net, loss_fn
@@ -41,10 +41,10 @@ class HugModel(torch.nn.Module):
         """Forward pass of the model.
 
         Args:
-            **batch: Keyword arguments representing the input batch.
+            **batch: Keyword arguments representing the input batch
 
         Returns:
-            dict: Output dictionary containing logits and loss.
+            dict: Output dictionary containing logits and loss
         """
         # Model forward pass logic
         if self.loss_fn is None:
@@ -79,10 +79,10 @@ class HugModel(torch.nn.Module):
         """Compute evaluation metrics.
 
         Args:
-            eval_preds: Tuple of logits and labels.
+            eval_preds: Tuple of logits and labels
 
         Returns:
-            dict: Dictionary of computed metrics.
+            dict: Dictionary of computed metrics
         """
         logits, labels = eval_preds
         for k, m in self.metrics_dict.items():
@@ -93,13 +93,13 @@ class HugModel(torch.nn.Module):
         return result
 
     def get_collate_fn(self, default_fn):
-        """Get custom collate function for the data loader.
+        """Get custom collate function for the data loader
 
         Args:
-            default_fn: Default collate function.
+            default_fn: Default collate function
 
         Returns:
-            function: Custom collate function.
+            function: Custom collate function
         """
         def collate_fn(examples):
             batch = default_fn(examples)
@@ -121,20 +121,20 @@ class HugModel(torch.nn.Module):
         """Train the model.
 
         Args:
-            train_data: Training data.
-            val_data: Validation data.
-            output_dir: Output directory for saving checkpoints.
-            epochs: Number of training epochs.
-            learning_rate: Learning rate for training.
-            logging_steps: Number of steps to log information.
-            monitor: Metric to monitor for early stopping.
-            patience: Patience for early stopping.
-            mode: Early stopping mode ('min' or 'max').
-            plot: Whether to plot training progress.
-            wandb: Whether to use Weights & Biases for logging.
-            no_cuda: Whether to use CUDA.
-            use_mps_device: Whether to use Mixed Precision Training.
-            **kwargs: Additional keyword arguments.
+            train_data: Training data
+            val_data: Validation data
+            output_dir: Output directory for saving checkpoints
+            epochs: Number of training epochs
+            learning_rate: Learning rate for training
+            logging_steps: Number of steps to log information
+            monitor: Metric to monitor for early stopping
+            patience: Patience for early stopping
+            mode: Early stopping mode ('min' or 'max')
+            plot: Whether to plot training progress
+            wandb: Whether to use Weights & Biases for logging
+            no_cuda: Whether to use CUDA
+            use_mps_device: Whether to use Mixed Precision Training
+            **kwargs: Additional keyword arguments
         """
         self.train_data,self.val_data,self.monitor,self.mode = train_data,val_data,monitor,mode
         
@@ -210,14 +210,14 @@ class HugModel(torch.nn.Module):
     
 
     def evaluate(self, val_data, **kwargs):
-        """Evaluate the model on validation data.
+        """Evaluate the model on validation data
 
         Args:
             val_data: Validation data.
-            **kwargs: Additional keyword arguments.
+            **kwargs: Additional keyword arguments
 
         Returns:
-            dict: Dictionary of evaluation metrics.
+            dict: Dictionary of evaluation metrics
         """
         dl_val = self.trainer.get_eval_dataloader(val_data.dataset)
         out = self.trainer.evaluation_loop(dl_val,
@@ -226,10 +226,10 @@ class HugModel(torch.nn.Module):
         return out
 
     def save_ckpt(self, ckpt_path):
-        """Save model checkpoint.
+        """Save model checkpoint
 
         Args:
-            ckpt_path: Path to save the checkpoint.
+            ckpt_path: Path to save the checkpoint
         """
         supported_classes = [PreTrainedModel]
         if is_peft_available():
@@ -242,10 +242,10 @@ class HugModel(torch.nn.Module):
             torch.save(self.net.state_dict(), ckpt_path)
 
     def load_ckpt(self, ckpt_path):
-        """Load model checkpoint.
+        """Load model checkpoint
 
         Args:
-            ckpt_path: Path to load the checkpoint from.
+            ckpt_path: Path to load the checkpoint from
         """
         if is_peft_available():
             from peft import PeftModel
@@ -290,12 +290,12 @@ class HugModel(torch.nn.Module):
 class VisCallback(TrainerCallback):
     def __init__(self, figsize=(6, 4), update_freq=1, monitor=None):
         """
-        Visualization callback for Hugging Face Transformers Trainer.
+        Visualization callback for Hugging Face Transformers Trainer
 
         Args:
-            figsize (tuple, optional): Figure size. Defaults to (6, 4).
-            update_freq (int, optional): Frequency of updating the visualization. Defaults to 1.
-            monitor (str, optional): Metric to monitor. Defaults to None.
+            figsize (tuple, optional): Figure size. Defaults to (6, 4)
+            update_freq (int, optional): Frequency of updating the visualization. Defaults to 1
+            monitor (str, optional): Metric to monitor. Defaults to None
         """
         self.figsize = figsize
         self.update_freq = update_freq
@@ -303,12 +303,12 @@ class VisCallback(TrainerCallback):
 
     def on_train_begin(self, args, state, control, **kwargs):
         """
-        Called at the beginning of training.
+        Called at the beginning of training
 
         Args:
-            args (TrainingArguments): Training arguments.
-            state (TrainerState): Trainer state.
-            control (TrainerControl): Trainer control.
+            args (TrainingArguments): Training arguments
+            state (TrainerState): Trainer state
+            control (TrainerControl): Trainer control
         """
         metric = args.metric_for_best_model
         self.greater_is_better = args.greater_is_better
@@ -321,13 +321,13 @@ class VisCallback(TrainerCallback):
 
     def on_evaluate(self, args, state, control, metrics, **kwargs):
         """
-        Called after each evaluation.
+        Called after each evaluation
 
         Args:
-            args (TrainingArguments): Training arguments.
-            state (TrainerState): Trainer state.
-            control (TrainerControl): Trainer control.
-            metrics (Dict): Evaluation metrics.
+            args (TrainingArguments): Training arguments
+            state (TrainerState): Trainer state
+            control (TrainerControl): Trainer control
+            metrics (Dict): Evaluation metrics
         """
         dfhistory = self.get_history(state)
         n = dfhistory['step'].max()
@@ -338,25 +338,25 @@ class VisCallback(TrainerCallback):
 
     def on_train_end(self, args, state, control, **kwargs):
         """
-        Called at the end of training.
+        Called at the end of training
 
         Args:
-            args (TrainingArguments): Training arguments.
-            state (TrainerState): Trainer state.
-            control (TrainerControl): Trainer control.
+            args (TrainingArguments): Training arguments
+            state (TrainerState): Trainer state
+            control (TrainerControl): Trainer control
         """
         dfhistory = self.get_history(state)
         self.update_graph(dfhistory, self.metric.replace(self.prefix, ''), figsize=self.figsize)
 
     def get_history(self, state):
         """
-        Get training and evaluation history from TrainerState.
+        Get training and evaluation history from TrainerState
 
         Args:
-            state (TrainerState): Trainer state.
+            state (TrainerState): Trainer state
 
         Returns:
-            DataFrame: Combined training and evaluation history.
+            DataFrame: Combined training and evaluation history
         """
         log_history = state.log_history
         train_history = [x for x in log_history if 'loss' in x.keys()]
@@ -371,13 +371,13 @@ class VisCallback(TrainerCallback):
 
     def get_best_score(self, dfhistory):
         """
-        Get the best score and corresponding step.
+        Get the best score and corresponding step
 
         Args:
-            dfhistory (DataFrame): Combined training and evaluation history.
+            dfhistory (DataFrame): Combined training and evaluation history
 
         Returns:
-            Tuple: (best_step, best_score).
+            Tuple: (best_step, best_score)
         """
         arr_scores = dfhistory[self.metric]
         best_score = np.max(arr_scores) if self.greater_is_better else np.min(arr_scores)
@@ -386,14 +386,14 @@ class VisCallback(TrainerCallback):
 
     def update_graph(self, dfhistory, metric, x_bounds=None, y_bounds=None, figsize=(6, 4)):
         """
-        Update the visualization graph.
+        Update the visualization graph
 
         Args:
-            dfhistory (DataFrame): Combined training and evaluation history.
-            metric (str): Metric to visualize.
-            x_bounds (list, optional): X-axis bounds. Defaults to None.
-            y_bounds (list, optional): Y-axis bounds. Defaults to None.
-            figsize (tuple, optional): Figure size. Defaults to (6, 4).
+            dfhistory (DataFrame): Combined training and evaluation history
+            metric (str): Metric to visualize
+            x_bounds (list, optional): X-axis bounds. Defaults to None
+            y_bounds (list, optional): Y-axis bounds. Defaults to None
+            figsize (tuple, optional): Figure size. Defaults to (6, 4)
         """
         from IPython.display import display
         if not hasattr(self, 'graph_fig'):
