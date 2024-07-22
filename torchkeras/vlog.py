@@ -49,7 +49,7 @@ class VLog:
 
     def log_epoch(self, info):
         """
-        Logs information at the end of each epoch.
+        Logs information at the end of each epoch
 
         Args:
         - info (dict): Dictionary containing epoch-related information.
