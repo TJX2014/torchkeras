@@ -11,13 +11,13 @@ class TensorBoardCallback:
     def __init__(self, save_dir="runs", model_name="model",
                  log_weight=False, log_weight_freq=5):
         """
-        TensorBoard callback for logging training progress.
+        TensorBoard callback for logging training progress
 
         Args:
-        -  save_dir (str): Directory to save TensorBoard logs.
-        -  model_name (str): Name of the model.
-        -  log_weight (bool): Whether to log model weights.
-        -  log_weight_freq (int): Frequency of logging model weights during training.
+        -  save_dir (str): Directory to save TensorBoard logs
+        -  model_name (str): Name of the model
+        -  log_weight (bool): Whether to log model weights
+        -  log_weight_freq (int): Frequency of logging model weights during training
         """
         from torch.utils.tensorboard import SummaryWriter
         self.__dict__.update(locals())
@@ -27,10 +27,10 @@ class TensorBoardCallback:
 
     def on_fit_start(self, model: 'KerasModel'):
         """
-        Callback function called at the beginning of model fitting.
+        Callback function called at the beginning of model fitting
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         # Log model weights
         if self.log_weight:
@@ -41,7 +41,7 @@ class TensorBoardCallback:
 
     def on_train_epoch_end(self, model: 'KerasModel'):
         """
-        Callback function called at the end of each training epoch.
+        Callback function called at the end of each training epoch
 
         Args:
         - model (KerasModel): The KerasModel being trained.
@@ -57,10 +57,10 @@ class TensorBoardCallback:
 
     def on_validation_epoch_end(self, model: 'KerasModel'):
         """
-        Callback function called at the end of each validation epoch.
+        Callback function called at the end of each validation epoch
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         dfhistory = pd.DataFrame(model.history)
         n = len(dfhistory)
@@ -80,10 +80,10 @@ class TensorBoardCallback:
 
     def on_fit_end(self, model: 'KerasModel'):
         """
-        Callback function called at the end of model fitting.
+        Callback function called at the end of model fitting
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         # Log model weights
         epoch = max(model.history['epoch'])
@@ -102,14 +102,14 @@ class TensorBoardCallback:
 class WandbCallback:
     def __init__(self, project=None, config=None, name=None, save_ckpt=True, save_code=True):
         """
-        WandbCallback for logging training progress using Weights & Biases.
+        WandbCallback for logging training progress using Weights & Biases
 
         Args:
-        - project (str): Name of the project in W&B.
-        - config (dict or Namespace): Configuration parameters.
+        - project (str): Name of the project in W&B
+        - config (dict or Namespace): Configuration parameters
         - name (str): Name of the run.
-        - save_ckpt (bool): Whether to save model checkpoints.
-        - save_code (bool): Whether to save code artifacts.
+        - save_ckpt (bool): Whether to save model checkpoints
+        - save_code (bool): Whether to save code artifacts
         """
         self.__dict__.update(locals())
         if isinstance(config, Namespace):
@@ -121,10 +121,10 @@ class WandbCallback:
 
     def on_fit_start(self, model: 'KerasModel'):
         """
-        Callback function called at the beginning of model fitting.
+        Callback function called at the beginning of model fitting
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         if self.wb.run is None:
             self.wb.init(project=self.project, config=self.config, name=self.name, save_code=self.save_code)
@@ -132,19 +132,19 @@ class WandbCallback:
 
     def on_train_epoch_end(self, model: 'KerasModel'):
         """
-        Callback function called at the end of each training epoch.
+        Callback function called at the end of each training epoch
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         pass
 
     def on_validation_epoch_end(self, model: 'KerasModel'):
         """
-        Callback function called at the end of each validation epoch.
+        Callback function called at the end of each validation epoch
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         dfhistory = pd.DataFrame(model.history)
         n = len(dfhistory)
@@ -162,10 +162,10 @@ class WandbCallback:
 
     def on_fit_end(self, model: 'KerasModel'):
         """
-        Callback function called at the end of model fitting.
+        Callback function called at the end of model fitting
 
         Args:
-        - model (KerasModel): The KerasModel being trained.
+        - model (KerasModel): The KerasModel being trained
         """
         # Save dfhistory
         dfhistory = pd.DataFrame(model.history)
@@ -197,10 +197,10 @@ class VisProgress:
         pass
 
     def on_fit_start(self, model: 'KerasModel'):
-        """Callback at the beginning of the training.
+        """Callback at the beginning of the training
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         from .pbar import ProgressBar
         self.progress = ProgressBar(range(model.epochs))
@@ -210,24 +210,24 @@ class VisProgress:
         """Callback at the end of each training epoch.
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         pass
 
     def on_validation_epoch_end(self, model: "KerasModel"):
-        """Callback at the end of each validation epoch.
+        """Callback at the end of each validation epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         dfhistory = pd.DataFrame(model.history)
         self.progress.update(dfhistory['epoch'].iloc[-1])
 
     def on_fit_end(self, model: "KerasModel"):
-        """Callback at the end of the entire training process.
+        """Callback at the end of the entire training process
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         dfhistory = pd.DataFrame(model.history)
         if dfhistory['epoch'].max() < model.epochs:
@@ -237,18 +237,18 @@ class VisProgress:
 
 class VisMetric:
     def __init__(self, figsize=(6, 4), save_path='history.png'):
-        """Visualization callback for monitoring metrics.
+        """Visualization callback for monitoring metrics
 
         Args:
-            figsize (tuple, optional): Figure size. Defaults to (6, 4).
-            save_path (str, optional): Path to save the history plot. Defaults to 'history.png'.
+            figsize (tuple, optional): Figure size. Defaults to (6, 4)
+            save_path (str, optional): Path to save the history plot. Defaults to 'history.png'
         """
         self.figsize = (6, 4)
         self.save_path = save_path
         self.in_jupyter = is_jupyter()
 
     def on_fit_start(self, model: 'KerasModel'):
-        """Callback at the beginning of the training.
+        """Callback at the beginning of the training
 
         Args:
             model (KerasModel): The KerasModel instance.
@@ -262,18 +262,18 @@ class VisMetric:
         self.update_graph(model, title=title, x_bounds=x_bounds)
 
     def on_train_epoch_end(self, model: 'KerasModel'):
-        """Callback at the end of each training epoch.
+        """Callback at the end of each training epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         pass
 
     def on_validation_epoch_end(self, model: "KerasModel"):
-        """Callback at the end of each validation epoch.
+        """Callback at the end of each validation epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         dfhistory = pd.DataFrame(model.history)
         n = len(dfhistory)
@@ -282,10 +282,10 @@ class VisMetric:
         self.update_graph(model, title=title, x_bounds=x_bounds)
 
     def on_fit_end(self, model: "KerasModel"):
-        """Callback at the end of the entire training process.
+        """Callback at the end of the entire training process
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         dfhistory = pd.DataFrame(model.history)
         title = self.get_title(model)
@@ -295,10 +295,10 @@ class VisMetric:
         """Get the best score and epoch.
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
 
         Returns:
-            tuple: Best epoch and best score.
+            tuple: Best epoch and best score
         """
         dfhistory = pd.DataFrame(model.history)
         arr_scores = dfhistory[model.monitor]
@@ -307,10 +307,10 @@ class VisMetric:
         return (best_epoch, best_score)
 
     def get_title(self, model: 'KerasModel'):
-        """Get the title for the plot.
+        """Get the title for the plot
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
 
         Returns:
             str: The title.
@@ -323,10 +323,10 @@ class VisMetric:
         """Update the metric plot.
 
         Args:
-            model (KerasModel): The KerasModel instance.
-            title (str, optional): Plot title. Defaults to None.
-            x_bounds (list, optional): x-axis bounds. Defaults to None.
-            y_bounds (list, optional): y-axis bounds. Defaults to None.
+            model (KerasModel): The KerasModel instance
+            title (str, optional): Plot title. Defaults to None
+            x_bounds (list, optional): x-axis bounds. Defaults to None
+            y_bounds (list, optional): y-axis bounds. Defaults to None
         """
         import matplotlib.pyplot as plt
         self.plt = plt
@@ -381,13 +381,13 @@ import pandas as pd
 
 class VisDisplay:
     def __init__(self, display_fn, model=None, init_display=True, dis_period=1):
-        """Visualization callback for displaying custom information during training.
+        """Visualization callback for displaying custom information during training
 
         Args:
-            display_fn (callable): Function to display information. Should accept a KerasModel instance.
-            model (KerasModel, optional): The KerasModel instance. Defaults to None.
-            init_display (bool, optional): Whether to display information initially. Defaults to True.
-            dis_period (int, optional): Display period (in epochs). Defaults to 1.
+            display_fn (callable): Function to display information. Should accept a KerasModel instance
+            model (KerasModel, optional): The KerasModel instance. Defaults to None
+            init_display (bool, optional): Whether to display information initially. Defaults to True
+            dis_period (int, optional): Display period (in epochs). Defaults to 1
         """
         from ipywidgets import Output
         self.display_fn = display_fn
@@ -401,27 +401,27 @@ class VisDisplay:
                 self.display_fn(model)
 
     def on_fit_start(self, model: 'KerasModel'):
-        """Callback at the beginning of the training.
+        """Callback at the beginning of the training
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         if not self.init_display:
             display(self.out)
 
     def on_train_epoch_end(self, model: 'KerasModel'):
-        """Callback at the end of each training epoch.
+        """Callback at the end of each training epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         pass
 
     def on_validation_epoch_end(self, model: "KerasModel"):
-        """Callback at the end of each validation epoch.
+        """Callback at the end of each validation epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         if len(model.history['epoch']) % self.dis_period == 0:
             self.out.clear_output()
@@ -429,49 +429,49 @@ class VisDisplay:
                 self.display_fn(model)
 
     def on_fit_end(self, model: "KerasModel"):
-        """Callback at the end of the entire training process.
+        """Callback at the end of the entire training process
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         pass
 
 
 class EpochCheckpoint:
     def __init__(self, ckpt_dir="weights", save_freq=1, max_ckpt=10):
-        """Callback for saving model checkpoints during training.
+        """Callback for saving model checkpoints during training
 
         Args:
-            ckpt_dir (str, optional): Directory to save checkpoints. Defaults to "weights".
-            save_freq (int, optional): Save frequency (in epochs). Defaults to 1.
-            max_ckpt (int, optional): Maximum number of checkpoints to keep. Defaults to 10.
+            ckpt_dir (str, optional): Directory to save checkpoints. Defaults to "weights"
+            save_freq (int, optional): Save frequency (in epochs). Defaults to 1
+            max_ckpt (int, optional): Maximum number of checkpoints to keep. Defaults to 10
         """
         self.__dict__.update(locals())
         self.ckpt_idx = 0
 
     def on_fit_start(self, model: 'KerasModel'):
-        """Callback at the beginning of the training.
+        """Callback at the beginning of the training
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         if not os.path.exists(self.ckpt_dir):
             os.mkdir(self.ckpt_dir)
         self.ckpt_list = ['' for i in range(self.max_ckpt)]
 
     def on_train_epoch_end(self, model: 'KerasModel'):
-        """Callback at the end of each training epoch.
+        """Callback at the end of each training epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         pass
 
     def on_validation_epoch_end(self, model: "KerasModel"):
-        """Callback at the end of each validation epoch.
+        """Callback at the end of each validation epoch
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         dfhistory = pd.DataFrame(model.history)
         epoch = dfhistory['epoch'].iloc[-1]
@@ -486,9 +486,9 @@ class EpochCheckpoint:
             self.ckpt_idx = (self.ckpt_idx + 1) % self.max_ckpt
 
     def on_fit_end(self, model: "KerasModel"):
-        """Callback at the end of the entire training process.
+        """Callback at the end of the entire training process
 
         Args:
-            model (KerasModel): The KerasModel instance.
+            model (KerasModel): The KerasModel instance
         """
         pass
