@@ -13,17 +13,17 @@ class StepRunner:
     def __init__(self, net, loss_fn, accelerator=None, stage="train", metrics_dict=None,
                  optimizer=None, lr_scheduler=None, **kwargs):
         """
-        Initialize the StepRunner object.
+        Initialize the StepRunner object
 
         Args:
-            net: Neural network model.
-            loss_fn: Loss function.
-            accelerator: Hardware accelerator (e.g., GPU，CPU).
-            stage: Training or evaluation stage.
-            metrics_dict: Dictionary of metrics functions.
-            optimizer: Optimizer for training.
-            lr_scheduler: Learning rate scheduler.
-            **kwargs: Additional keyword arguments.
+            net: Neural network model
+            loss_fn: Loss function
+            accelerator: Hardware accelerator (e.g., GPU，CPU)
+            stage: Training or evaluation stage
+            metrics_dict: Dictionary of metrics functions
+            optimizer: Optimizer for training
+            lr_scheduler: Learning rate scheduler
+            **kwargs: Additional keyword arguments
         """
         self.net, self.loss_fn, self.metrics_dict, self.stage = net, loss_fn, metrics_dict, stage
         self.optimizer, self.lr_scheduler = optimizer, lr_scheduler
@@ -93,11 +93,11 @@ class StepRunner:
 class EpochRunner:
     def __init__(self, step_runner, quiet=False):
         """
-        Initialize the EpochRunner object.
+        Initialize the EpochRunner object
 
         Args:
-            step_runner: StepRunner object for handling individual training or evaluation steps.
-            quiet: Flag to control whether to display progress bar and logs.
+            step_runner: StepRunner object for handling individual training or evaluation steps
+            quiet: Flag to control whether to display progress bar and logs
         """
         self.step_runner = step_runner
         self.stage = step_runner.stage
@@ -107,13 +107,13 @@ class EpochRunner:
 
     def __call__(self, dataloader):
         """
-        Perform a complete epoch of training or evaluation.
+        Perform a complete epoch of training or evaluation
 
         Args:
-            dataloader: DataLoader providing batches of data for the epoch.
+            dataloader: DataLoader providing batches of data for the epoch
 
         Returns:
-            Dictionary containing aggregated epoch losses and metrics.
+            Dictionary containing aggregated epoch losses and metrics
         """
         # Determine the size of the dataset
         n = dataloader.size if hasattr(dataloader, 'size') else len(dataloader)
@@ -175,12 +175,12 @@ class KerasModel(torch.nn.Module):
         Initialize the KerasModel.
 
         Args:
-            net: Neural network model.
-            loss_fn: Loss function.
-            metrics_dict: Dictionary of metrics functions.
-            optimizer: Optimizer for training.
-            lr_scheduler: Learning rate scheduler.
-            **kwargs: Additional keyword arguments.
+            net: Neural network model
+            loss_fn: Loss function
+            metrics_dict: Dictionary of metrics functions
+            optimizer: Optimizer for training
+            lr_scheduler: Learning rate scheduler
+            **kwargs: Additional keyword arguments
         """
         super().__init__()
         self.net, self.loss_fn, self.metrics_dict = net, loss_fn, torch.nn.ModuleDict(metrics_dict)
@@ -192,11 +192,11 @@ class KerasModel(torch.nn.Module):
 
     def save_ckpt(self, ckpt_path=None, accelerator=None):
         """
-        Save the model checkpoint.
+        Save the model checkpoint
 
         Args:
-            ckpt_path: Path to save the checkpoint.
-            accelerator: Hardware accelerator (e.g., GPU).
+            ckpt_path: Path to save the checkpoint
+            accelerator: Hardware accelerator (e.g., GPU)
         """
         accelerator = accelerator if accelerator is not None else self.accelerator
         net_dict = accelerator.get_state_dict(self.net)
@@ -204,10 +204,10 @@ class KerasModel(torch.nn.Module):
 
     def load_ckpt(self, ckpt_path=None):
         """
-        Load the model checkpoint.
+        Load the model checkpoint
 
         Args:
-            ckpt_path: Path to the checkpoint.
+            ckpt_path: Path to the checkpoint
         """
         self.net.load_state_dict(torch.load(ckpt_path if ckpt_path is not None else self.ckpt_path,
                                             map_location='cpu'))
@@ -215,13 +215,13 @@ class KerasModel(torch.nn.Module):
 
     def forward(self, x):
         """
-        Forward pass through the model.
+        Forward pass through the model
 
         Args:
-            x: Input data.
+            x: Input data
 
         Returns:
-            Model predictions.
+            Model predictions
         """
         return self.net.forward(x)
 
@@ -233,20 +233,20 @@ class KerasModel(torch.nn.Module):
         Train the model.
 
         Args:
-            train_data: Training data.
-            val_data: Validation data.
-            epochs: Number of training epochs.
-            ckpt_path: Path to save model checkpoints.
-            patience: Number of epochs with no improvement after which training will be stopped.
-            monitor: Metric to monitor for early stopping.
-            mode: 'min' for minimizing the monitor metric, 'max' for maximizing.
-            callbacks: List of callback functions.
-            plot: Whether to plot training progress.
-            wandb: Whether to use WandB for logging.
-            quiet: Whether to suppress training progress logs.
-            mixed_precision: Mixed precision training ('no', 'O1', 'O2', 'O3').
-            cpu: Use CPU for training.
-            gradient_accumulation_steps: Number of steps to accumulate gradients before optimizer step.
+            train_data: Training data
+            val_data: Validation data
+            epochs: Number of training epochs
+            ckpt_path: Path to save model checkpoints
+            patience: Number of epochs with no improvement after which training will be stopped
+            monitor: Metric to monitor for early stopping
+            mode: 'min' for minimizing the monitor metric, 'max' for maximizing
+            callbacks: List of callback functions
+            plot: Whether to plot training progress
+            wandb: Whether to use WandB for logging
+            quiet: Whether to suppress training progress logs
+            mixed_precision: Mixed precision training ('no', 'O1', 'O2', 'O3')
+            cpu: Use CPU for training
+            gradient_accumulation_steps: Number of steps to accumulate gradients before optimizer step
 
         Returns:
             DataFrame containing training history.
@@ -382,14 +382,14 @@ class KerasModel(torch.nn.Module):
         
     def evaluate(self, val_data, quiet=False):
         """
-        Evaluate the model on validation data.
+        Evaluate the model on validation data
 
         Args:
-            val_data: Validation data.
-            quiet: Whether to suppress evaluation progress logs.
+            val_data: Validation data
+            quiet: Whether to suppress evaluation progress logs
 
         Returns:
-            Dictionary of evaluation metrics.
+            Dictionary of evaluation metrics
         """
         # Ensure accelerator is available or create a new one
         accelerator = Accelerator() if not hasattr(self, 'accelerator') else self.accelerator
@@ -423,21 +423,21 @@ class KerasModel(torch.nn.Module):
         Distributed Data Parallel (DDP) training for the model.
 
         Args:
-            num_processes: Number of processes for DDP.
-            train_data: Training data.
-            val_data: Validation data.
-            epochs: Number of training epochs.
-            ckpt_path: Path to save model checkpoints.
-            patience: Number of epochs with no improvement after which training will be stopped.
-            monitor: Metric to monitor for early stopping.
-            mode: 'min' for minimizing the monitor metric, 'max' for maximizing.
-            callbacks: List of callback functions.
-            plot: Whether to plot training progress.
-            wandb: Whether to use WandB for logging.
-            quiet: Whether to suppress training progress logs.
-            mixed_precision: Mixed precision training ('no', 'O1', 'O2', 'O3').
-            cpu: Use CPU for training.
-            gradient_accumulation_steps: Number of steps to accumulate gradients before optimizer step.
+            num_processes: Number of processes for DDP
+            train_data: Training data
+            val_data: Validation data
+            epochs: Number of training epochs
+            ckpt_path: Path to save model checkpoints
+            patience: Number of epochs with no improvement after which training will be stopped
+            monitor: Metric to monitor for early stopping
+            mode: 'min' for minimizing the monitor metric, 'max' for maximizing
+            callbacks: List of callback functions
+            plot: Whether to plot training progress
+            wandb: Whether to use WandB for logging
+            quiet: Whether to suppress training progress logs
+            mixed_precision: Mixed precision training ('no', 'O1', 'O2', 'O3')
+            cpu: Use CPU for training
+            gradient_accumulation_steps: Number of steps to accumulate gradients before optimizer step
         """
         # Import notebook_launcher from accelerate
         from accelerate import notebook_launcher
@@ -451,15 +451,15 @@ class KerasModel(torch.nn.Module):
     
     def evaluate_ddp(self, num_processes, val_data, quiet=False):
         """
-        Distributed Data Parallel (DDP) evaluation for the model.
+        Distributed Data Parallel (DDP) evaluation for the model
 
         Args:
-            num_processes: Number of processes for DDP.
+            num_processes: Number of processes for DDP
             val_data: Validation data.
-            quiet: Whether to suppress evaluation progress logs.
+            quiet: Whether to suppress evaluation progress logs
 
         Returns:
-            Dictionary of evaluation metrics.
+            Dictionary of evaluation metrics
         """
         # Import notebook_launcher from accelerate
         from accelerate import notebook_launcher
