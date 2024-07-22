@@ -11,15 +11,15 @@ class VLog:
     def __init__(self, epochs, monitor_metric='val_loss', monitor_mode='min',
                  save_path='history.png', figsize=(8, 6), bar=True):
         """
-        Initializes the VLog class.
+        Initializes the VLog class
 
         Args:
-        - epochs (int): Total number of epochs for training.
-        - monitor_metric (str): The metric to monitor (e.g., 'val_loss').
-        - monitor_mode (str): The mode for monitoring ('min' or 'max').
-        - save_path (str): Path to save the history plot.
-        - figsize (tuple): Figure size for the plot.
-        - bar (bool): Whether to display a progress bar.
+        - epochs (int): Total number of epochs for training
+        - monitor_metric (str): The metric to monitor (e.g., 'val_loss')
+        - monitor_mode (str): The mode for monitoring ('min' or 'max')
+        - save_path (str): Path to save the history plot
+        - figsize (tuple): Figure size for the plot
+        - bar (bool): Whether to display a progress bar
         """
 
         self.figsize = figsize
@@ -36,7 +36,7 @@ class VLog:
     def log_start(self):
         """
         Logs the start of training.
-        Displays the path to the dynamic loss/metric plot.
+        Displays the path to the dynamic loss/metric plot
         """
         if not self.in_jupyter:
             print('\nView dynamic loss/metric plot:\n' + os.path.abspath(self.save_path))
@@ -69,11 +69,11 @@ class VLog:
 
     def log_step(self, info, training=True):
         """
-        Logs information at the end of each training or validation step.
+        Logs information at the end of each training or validation step
 
         Args:
-        - info (dict): Dictionary containing step-related information.
-        - training (bool): Whether it is a training step.
+        - info (dict): Dictionary containing step-related information
+        - training (bool): Whether it is a training step
         """
         if self.bar:
             if training:
@@ -90,8 +90,8 @@ class VLog:
 
     def log_end(self):
         """
-        Logs the end of training.
-        Displays the final history plot.
+        Logs the end of training
+        Displays the final history plot
         """
         title = self.get_title()
         self.update_graph(title=title)
@@ -106,7 +106,7 @@ class VLog:
 
     def get_best_score(self):
         """
-        Gets the best epoch and score based on the monitored metric.
+        Gets the best epoch and score based on the monitored metric
 
         Returns:
         Tuple: (best_epoch, best_score)
@@ -119,10 +119,10 @@ class VLog:
 
     def get_title(self):
         """
-        Generates the title for the history plot.
+        Generates the title for the history plot
 
         Returns:
-        str: Title for the history plot.
+        str: Title for the history plot
         """
         best_epoch, best_score = self.get_best_score()
         title = f'best {self.metric_name}={best_score:.4f} (@epoch {best_epoch})'
@@ -130,12 +130,12 @@ class VLog:
 
     def update_graph(self, title=None, x_bounds=None, y_bounds=None):
         """
-        Updates and saves the history plot.
+        Updates and saves the history plot
 
         Args:
-        - title (str): Title for the plot.
-        - x_bounds (list): x-axis bounds for the plot.
-        - y_bounds (list): y-axis bounds for the plot.
+        - title (str): Title for the plot
+        - x_bounds (list): x-axis bounds for the plot
+        - y_bounds (list): y-axis bounds for the plot
         """
         import matplotlib.pyplot as plt
         self.plt = plt
