@@ -10,14 +10,14 @@ from .utils import printlog, prettydf
 
 def merge_state(state_list, weights=None):
     """
-    Merges states from multiple checkpoints with optional weights.
+    Merges states from multiple checkpoints with optional weights
 
     Args:
-        state_list (list): List of checkpoint paths or state dictionaries.
-        weights (list): List of weights corresponding to each state. If None, equal weights are assigned.
+        state_list (list): List of checkpoint paths or state dictionaries
+        weights (list): List of weights corresponding to each state. If None, equal weights are assigned
 
     Returns:
-        dict: Merged state dictionary.
+        dict: Merged state dictionary
     """
     if weights is None:
         weights = [1 for _ in state_list]
@@ -39,15 +39,15 @@ def merge_state(state_list, weights=None):
 
 def uniform_soup(model, ckpt_path_list, saved_ckpt_path='checkpoint_uniform_soup.pt'):
     """
-    Uniformly merges states from multiple checkpoints and evaluates the model.
+    Uniformly merges states from multiple checkpoints and evaluates the model
 
     Args:
-        model: The PyTorch model.
-        ckpt_path_list (list): List of checkpoint paths.
-        saved_ckpt_path (str): Path to save the merged checkpoint.
+        model: The PyTorch model
+        ckpt_path_list (list): List of checkpoint paths
+        saved_ckpt_path (str): Path to save the merged checkpoint
 
     Returns:
-        float: Evaluation score.
+        float: Evaluation score
     """
     state = merge_state(ckpt_path_list)
     model.net.load_state_dict(state)
@@ -57,17 +57,17 @@ def uniform_soup(model, ckpt_path_list, saved_ckpt_path='checkpoint_uniform_soup
 
 def greedy_soup(model, ckpt_path_list, num_models=120, num_warmup=0, saved_ckpt_path='checkpoint_greedy_soup.pt'):
     """
-    Greedily merges states from multiple checkpoints and evaluates the model.
+    Greedily merges states from multiple checkpoints and evaluates the model
 
     Args:
-        model: The PyTorch model.
-        ckpt_path_list (list): List of checkpoint paths.
-        num_models (int): Number of models to merge.
-        num_warmup (int): Number of warmup models (do not choose greedily).
-        saved_ckpt_path (str): Path to save the merged checkpoint.
+        model: The PyTorch model
+        ckpt_path_list (list): List of checkpoint paths
+        num_models (int): Number of models to merge
+        num_warmup (int): Number of warmup models (do not choose greedily)
+        saved_ckpt_path (str): Path to save the merged checkpoint
 
     Returns:
-        float: Evaluation score.
+        float: Evaluation score
     """
     dfckpt = pd.DataFrame({'ckpt_path': ckpt_path_list})
 
@@ -91,18 +91,18 @@ def optuna_soup(model,
                  saved_ckpt_path='checkpoint_optuna_soup.pt',
                  plot=True):
     """
-    Perform an Optuna search to find optimal weights for checkpoint ensemble.
+    Perform an Optuna search to find optimal weights for checkpoint ensemble
 
     Args:
-        model: The PyTorch model.
-        ckpt_path_list (list): List of checkpoint paths.
-        n_trials (int): Number of optimization trials.
-        timeout (int): Timeout for the optimization in seconds.
-        saved_ckpt_path (str): Path to save the final checkpoint.
-        plot (bool): Whether to plot the optimization analysis.
+        model: The PyTorch model
+        ckpt_path_list (list): List of checkpoint paths
+        n_trials (int): Number of optimization trials
+        timeout (int): Timeout for the optimization in seconds
+        saved_ckpt_path (str): Path to save the final checkpoint
+        plot (bool): Whether to plot the optimization analysis
 
     Returns:
-        float: Best evaluation score.
+        float: Best evaluation score
     """
     import optuna
     optuna.logging.set_verbosity(optuna.logging.WARNING)
