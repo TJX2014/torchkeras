@@ -392,6 +392,7 @@ class KerasModel(torch.nn.Module):
             Dictionary of evaluation metrics
         """
         # Ensure accelerator is available or create a new one
+        from accelerate import Accelerator
         accelerator = Accelerator() if not hasattr(self, 'accelerator') else self.accelerator
 
         # Prepare model, loss function, and metrics for evaluation

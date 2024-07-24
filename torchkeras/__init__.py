@@ -18,7 +18,7 @@ Detailed documentation and user guides are available at
 https://github.com/lyhue1991/torchkeras.
 """
 
-__version__="3.9.8"
+__version__="3.9.7"
 
 from torchkeras.vlog import VLog
 
