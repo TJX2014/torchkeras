@@ -16,7 +16,7 @@ def get_version():
 setup(
     name="torchkeras",
     version=get_version(),
-    author="PythonAiRoad, Laugh",
+    author="lyhue1991,octopus,Laugh",
     author_email="lyhue1991@163.com",
     description="pytorch❤️keras",
     long_description=README,

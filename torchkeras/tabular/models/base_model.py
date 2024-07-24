@@ -24,7 +24,7 @@ from torchkeras.tabular.utils import reset_all_weights
 class BaseModel(nn.Module,metaclass=ABCMeta):
     def __init__(
         self,
-        config: DictConfig
+        config: DictConfig,
         **kwargs,
     ):
         """Base Model for PyTorch Tabular.
@@ -36,7 +36,6 @@ class BaseModel(nn.Module,metaclass=ABCMeta):
         """
         super().__init__()
         self.hparams = config
-        self.custom_loss = custom_loss
         self._build_network()
         self._setup_loss()
 
