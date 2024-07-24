@@ -6,7 +6,7 @@ from torchkeras.tabular.config import ModelConfig
 
 
 @dataclass
-class NodeConfig(ModelConfig):
+class NODEConfig(ModelConfig):
     """Neural Oblivious Decision Ensembles for Deep Learning on Tabular Data configuration.
 
     Args:

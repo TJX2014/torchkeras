@@ -62,19 +62,6 @@ class NODEModel(BaseModel):
     def subset(self, x):
         return x[..., : self.hparams.output_dim].mean(dim=-2)
 
-    def data_aware_initialization(self, dataloader):
-        batch = next(iter(dataloader))
-        for k, v in batch.items():
-            if isinstance(v, list) and (len(v) == 0):
-                # Skipping empty list
-                continue
-            # batch[k] = v.to("cpu" if self.config.gpu == 0 else "cuda")
-            batch[k] = v.to(self.device)
-
-        # single forward pass to initialize the ODST
-        with torch.no_grad():
-            self(batch)
-
     @property
     def backbone(self):
         return self._backbone

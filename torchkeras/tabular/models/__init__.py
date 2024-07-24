@@ -17,7 +17,7 @@ from .danet import DANetConfig, DANetModel
 from .ft_transformer import FTTransformerConfig, FTTransformerModel
 from .gandalf import GANDALFBackbone, GANDALFConfig, GANDALFModel
 from .gate import GatedAdditiveTreeEnsembleConfig, GatedAdditiveTreeEnsembleModel
-from .node import NodeConfig, NODEModel
+from .node import NODEConfig, NODEModel
 from .tab_transformer import TabTransformerConfig, TabTransformerModel
 from .tabnet import TabNetModel, TabNetModelConfig
 
@@ -25,7 +25,7 @@ __all__ = [
     "CategoryEmbeddingModel",
     "CategoryEmbeddingModelConfig",
     "NODEModel",
-    "NodeConfig",
+    "NODEConfig",
     "TabNetModel",
     "TabNetModelConfig",
     "BaseModel",
