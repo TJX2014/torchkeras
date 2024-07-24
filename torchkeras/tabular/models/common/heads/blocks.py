@@ -6,8 +6,8 @@ from torch import nn
 from torch.autograd import Variable
 from torch.distributions import Categorical
 
-from pytorch_tabular.models.common.heads import config as head_config
-from pytorch_tabular.utils import _initialize_layers, _linear_dropout_bn
+from torchkeras.tabular.models.common.heads import config as head_config
+from torchkeras.tabular.utils import _initialize_layers, _linear_dropout_bn
 
 
 def config_link(r):

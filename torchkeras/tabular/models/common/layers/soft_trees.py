@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from pytorch_tabular.utils import check_numpy
+from torchkeras.tabular.utils import check_numpy
 
 from ..layers import ModuleWithInit
 from .activations import RSoftmax, entmax15, sparsemax, sparsemoid

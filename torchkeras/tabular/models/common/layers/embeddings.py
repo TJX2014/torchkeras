@@ -6,8 +6,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import torch
 from torch import nn
 
-from pytorch_tabular.models.common.layers.batch_norm import BatchNorm1d
-from pytorch_tabular.utils import _initialize_kaiming
+from torchkeras.tabular.models.common.layers.batch_norm import BatchNorm1d
+from torchkeras.tabular.utils import _initialize_kaiming
 
 
 # Slight adaptation from https://github.com/jrzaurin/pytorch-widedeep which in turn adapted from AutoGluon

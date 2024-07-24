@@ -4,6 +4,7 @@
 torchkeras.egg-info/*
 dist/*
 build/*
+*.ipynb_checkpoints
 torchkeras/__pycache__/
 torchkeras/models/__pycache__/
 examples/datasets/

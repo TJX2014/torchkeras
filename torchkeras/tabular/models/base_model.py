@@ -24,8 +24,7 @@ from torchkeras.tabular.utils import reset_all_weights
 class BaseModel(nn.Module,metaclass=ABCMeta):
     def __init__(
         self,
-        config: DictConfig,
-        custom_loss: nn.Module = None,
+        config: DictConfig
         **kwargs,
     ):
         """Base Model for PyTorch Tabular.
@@ -66,16 +65,12 @@ class BaseModel(nn.Module,metaclass=ABCMeta):
         )  # output_dim auto-calculated from other configs
 
     def _setup_loss(self):
-        if self.custom_loss is None:
-            try:
-                self.loss = getattr(nn, self.hparams.loss)()
-            except AttributeError as e:
-                print(f"{self.hparams.loss} is not a valid loss defined in the torch.nn module")
-                raise e
-        else:
-            self.loss = self.custom_loss
-
-
+        try:
+            self.loss = getattr(nn, self.hparams.loss)()
+        except AttributeError as e:
+            print(f"{self.hparams.loss} is not a valid loss defined in the torch.nn module")
+            raise e
+       
     def compute_loss(self, output: Dict, y: torch.Tensor) -> torch.Tensor:
         """Calculates the loss for the model.
 
@@ -176,6 +171,7 @@ class BaseModel(nn.Module,metaclass=ABCMeta):
         x = self.compute_backbone(x)
         return self.compute_head(x)
 
+    @torch.no_grad()
     def predict(self, x: Dict, ret_model_output: bool = False) -> Union[torch.Tensor, Tuple[torch.Tensor, Dict]]:
         """Predicts the output of the model.
 

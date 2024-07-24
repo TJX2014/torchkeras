@@ -6,7 +6,7 @@ import torch
 from einops import rearrange
 from torch import einsum, nn
 
-from pytorch_tabular.utils import _initialize_kaiming
+from torchkeras.tabular.utils import _initialize_kaiming
 
 from .gated_units import GEGLU, PositionWiseFeedForward, ReGLU, SwiGLU
 
