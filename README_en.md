@@ -153,8 +153,8 @@ KerasModel. Here are some examples.
 |ReinforcementLearning——DQN|- |[DQN](./examples/DQN.ipynb)|
 ||||
 |**Tabular**|||
-|BinaryClassification——LightGBM |- |[Q-learning](./examples/LightGBM二分类.ipynb)|
-|MultiClassification——FTTransformer🔥🔥🔥🔥🔥|- |[DQN](./examples/FTTransformer多分类.ipynb)|
+|BinaryClassification——LightGBM |- |[LightGBM](./examples/LightGBM二分类.ipynb)|
+|MultiClassification——FTTransformer🔥🔥🔥🔥🔥|- |[FTTransformer](./examples/FTTransformer多分类.ipynb)|
 ||||
 |**CV**|||
 |ImageClassification——Resnet|  -  | [Resnet](./examples/ResNet.ipynb) |
