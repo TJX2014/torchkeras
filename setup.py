@@ -20,7 +20,9 @@ setup(
     author_email="lyhue1991@163.com",
     description="pytorch❤️keras",
     long_description=README,
-    install_requires=[           
+    install_requires=[     
+        'einops',
+        'omegaconf',
          #'accelerate>=0.20.3',
          #'tqdm',
          #'torch',

@@ -319,6 +319,10 @@ examples目录下的范例库包括了使用torchkeras对一些非常常用的�
 |强化学习——Q-Learning 🔥🔥|- |[Q-learning](./examples/Q-learning.ipynb)|
 |强化学习——DQN|- |[DQN](./examples/DQN.ipynb)|
 ||||
+|**Tabular**|||
+|二分类——LightGBM |- |[Q-learning](./examples/LightGBM二分类.ipynb)|
+|多分类——FTTransformer🔥🔥🔥🔥🔥|- |[DQN](./examples/FTTransformer多分类.ipynb)|
+||||
 |**CV**|||
 |图片分类——Resnet|  -  | [Resnet](./examples/ResNet.ipynb) |
 |语义分割——UNet|  - | [UNet](./examples/UNet.ipynb) |

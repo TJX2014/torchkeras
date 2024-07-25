@@ -1,3 +1,6 @@
+*/catboost_info 
+*/catboost_cached_datasets 
+*/catboost_model 
 .DS_store
 .ipynb_checkpoints
 .ipynb_checkpoints/* 
