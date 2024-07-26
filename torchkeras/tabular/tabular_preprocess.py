@@ -7,7 +7,6 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import FeatureUnion, Pipeline
 
 class NumericPreprocessor(BaseEstimator, TransformerMixin):
-
     def __init__(self, numeric_features):
         self.numeric_features = numeric_features
 
@@ -82,13 +81,16 @@ class EmbeddingPreprocessor(BaseEstimator, TransformerMixin):
         self.trans_dics = {}
 
     def fit(self, X, y=None):
+        self.trans_max = {}
         for col in self.embedding_features:
             Xcol = self._fillna(X[col])
             self.trans_dics[col] = self._get_trans_dic(Xcol)
+            self.trans_max[col] = max(list(self.trans_dics[col].values()))
+        
         return self
 
     def transform(self, X, y=None):
-        Xs = [self._fillna(X[col]).apply(lambda a:self.trans_dics[col].get(a,0))
+        Xs = [self._fillna(X[col]).apply(lambda a:self.trans_dics[col].get(a,self.trans_max[col]))
              for col in self.embedding_features]
         return pd.concat(Xs,axis=1).values 
     

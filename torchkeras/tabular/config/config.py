@@ -21,7 +21,7 @@ def get_inferred_config(ds):
         raise ValueError(f"{ds.task} is an unsupported task.")
     
     categorical_cardinality = [
-        int(x) + 1 for x in list(ds.data[ds.categorical_cols].fillna("NA").nunique().values)
+        int(x) + 1 for x in ds.data[ds.categorical_cols].max().values
     ]
     embedding_dims = [(x, min(50, (x + 1) // 2)) for x in categorical_cardinality]
         
