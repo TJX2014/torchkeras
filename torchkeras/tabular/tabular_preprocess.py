@@ -71,7 +71,7 @@ class OneHotPreprocessor(BaseEstimator, TransformerMixin):
         return self._feature_names
     
     def _fillna(self, col):
-        return col.astype(str).fillna("nan").values.reshape(-1, 1)
+        return col.astype(str).values.reshape(-1, 1)
 
 class EmbeddingPreprocessor(BaseEstimator, TransformerMixin):
     
@@ -90,28 +90,24 @@ class EmbeddingPreprocessor(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-        Xs = [self._fillna(X[col]).apply(lambda a:self.trans_dics[col].get(a,self.trans_max[col]))
-             for col in self.embedding_features]
+        Xs = [self._fillna(X[col]).apply(
+            lambda a:self.trans_dics[col].get(a,self.trans_max[col])) 
+              for col in self.embedding_features]
         return pd.concat(Xs,axis=1).values 
     
     def _fillna(self, seri):
-        return seri.astype(str).fillna("nan")
+        return seri.astype(str)
     
     def _get_trans_dic(self,seri):
-        max_dictionary_size = self.max_dictionary_size
+        max_size = self.max_dictionary_size
         dfi = pd.DataFrame(seri.value_counts()).rename(lambda _:"count",axis = 1)
         dfi.sort_values("count",ascending=False,inplace = True)
         
         n = len(dfi)
-        if n<=max_dictionary_size:
+        if n<=max_size:
             dfi["index"] = range(n)
         else:
-            cum = np.cumsum(dfi["count"])
-            cum = cum/cum.iloc[-1]
-            cum_split = cum.iloc[max_dictionary_size//2]
-            get_index = lambda i: i if cum.iloc[i]<=cum_split else max_dictionary_size//2 + int(
-                (max_dictionary_size-max_dictionary_size//2)*(cum.iloc[i]-cum_split-1e-12)/(1-cum_split))
-            dfi["index"] = [get_index(i) for i in range(n)]
+            dfi["index"] = [i if i<=max_size-1 else max_size-1 for i in range(n)]
 
         trans_dic = dict(dfi["index"])  
         return trans_dic
@@ -127,7 +123,7 @@ class TabularPreprocessor(BaseEstimator, TransformerMixin):
                  numeric_features = None,
                  cat_features= None,
                  onehot_max_cat_num = 9,
-                 embedding_max_dictionary_size = 200, 
+                 embedding_max_dictionary_size = 1000, 
                  normalization = "quantile",
                  **kwargs):
         super().__init__(**kwargs)
@@ -244,6 +240,3 @@ class TabularPreprocessor(BaseEstimator, TransformerMixin):
     
     def get_embedding_cats_num(self):
         return self.embedding_cats_num
-    
-
-
