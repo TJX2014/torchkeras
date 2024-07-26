@@ -147,53 +147,48 @@ class Recall(nn.Module):
         self.true_positive.data.zero_()
         self.total_positive.data.zero_()
 
-
-class Recall(nn.Module):
-    """Recall for binary-classification task."""
-
+class AUC(nn.Module):
+    'approximate AUC calculation for binary-classification task'
     def __init__(self):
-        """Initialize the Recall module."""
         super().__init__()
-        # Counters for true positive and total positive predictions
-        self.true_positive = nn.Parameter(torch.tensor(0), requires_grad=False)
-        self.total_positive = nn.Parameter(torch.tensor(0), requires_grad=False)
-
+        self.tp = nn.Parameter(torch.zeros(10001),requires_grad=False)
+        self.fp = nn.Parameter(torch.zeros(10001),requires_grad=False)
+        
+    def eval_auc(self,tp,fp):
+        tp_total = torch.sum(tp)
+        fp_total = torch.sum(fp)
+        length = len(tp)
+        tp_reverse = tp[range(length-1,-1,-1)]
+        tp_reverse_cum = torch.cumsum(tp_reverse,dim=0)-tp_reverse/2.0
+        fp_reverse = fp[range(length-1,-1,-1)]
+        
+        auc = torch.sum(torch.true_divide(tp_reverse_cum,tp_total)
+                        *torch.true_divide(fp_reverse,fp_total))
+        return auc
+        
     def forward(self, preds: torch.Tensor, targets: torch.Tensor):
-        """
-        Forward pass to compute recall for binary classification.
-
-        Args:
-            preds (torch.Tensor): Model predictions.
-            targets (torch.Tensor): Ground truth labels.
-
-        Returns:
-            torch.Tensor: Recall for the current batch.
-        """
-        y_pred = torch.sigmoid(preds).reshape(-1)
+        y_pred = (10000*torch.sigmoid(preds)).reshape(-1).type(torch.int)
         y_true = targets.reshape(-1)
+        
+        tpi = self.tp-self.tp
+        fpi = self.fp-self.fp
         assert y_pred.shape == y_true.shape
-
-        true_positive_i = torch.sum((y_pred >= 0.5) * (y_true >= 0.5))
-        total_positive_i = torch.sum(y_true >= 0.5)
-        self.true_positive += true_positive_i
-        self.total_positive += total_positive_i
-        return torch.true_divide(true_positive_i, total_positive_i)
-
+        for i,label in enumerate(y_true):
+            if label>=0.5:
+                tpi[y_pred[i]]+=1.0
+            else:
+                fpi[y_pred[i]]+=1.0
+        self.tp+=tpi
+        self.fp+=fpi
+        return self.eval_auc(tpi,fpi)
+          
     def compute(self):
-        """
-        Compute recall.
-
-        Returns:
-            torch.Tensor: Recall.
-        """
-        # Calculate and return recall
-        return torch.true_divide(self.true_positive, self.total_positive)
-
+        return self.eval_auc(self.tp,self.fp)
+    
     def reset(self):
-        """Reset counters for true positive and total positive to zero."""
-        # Reset counters to zero for the next evaluation
-        self.true_positive.data.zero_()
-        self.total_positive.data.zero_()
+        self.tp-=self.tp
+        self.fp-=self.fp
+
 
 class KS(nn.Module):
     """Approximate KS calculation for binary-classification task."""
@@ -257,6 +252,7 @@ class KS(nn.Module):
         # Reset counters to zero for the next evaluation
         self.tp.data.zero_()
         self.fp.data.zero_()
+        
 
 class IOU(nn.Module):
     """
