@@ -7,9 +7,6 @@ from typing import Dict
 import torch
 import torch.nn as nn
 from omegaconf import DictConfig
-from pytorch_tabnet.tab_network import TabNet
-from pytorch_tabnet.utils import create_group_matrix
-
 from ..base_model import BaseModel
 
 
@@ -20,6 +17,8 @@ class TabNetBackbone(nn.Module):
         self._build_network()
 
     def _build_network(self):
+        from pytorch_tabnet.tab_network import TabNet
+        from pytorch_tabnet.utils import create_group_matrix
         if self.hparams.grouped_features:
             # converting the grouped_features into a nested list of indices
             features = self.hparams.categorical_cols + self.hparams.continuous_cols
