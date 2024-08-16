@@ -85,12 +85,12 @@ summary(model,input_data=features);
 
 # ### 3, train the model
 
-ckpt_path='checkpoint.pt'
+ckpt_path='checkpoint'
 #model.load_ckpt(ckpt_path) #load trained ckpt and continue training
 dfhistory=model.fit(train_data=dl_train, 
                     val_data=dl_val, 
                     epochs=100, 
-                    patience=10, 
+                    patience=5, 
                     monitor="val_acc",
                     mode="max",
                     ckpt_path=ckpt_path,
@@ -102,11 +102,10 @@ model.evaluate(dl_val,quiet=False)
 
 
 # ### 5, save the model
-
 net_clone = create_net() 
 
 model_clone = torchkeras.KerasModel(net_clone,loss_fn = nn.CrossEntropyLoss(),
              optimizer= torch.optim.Adam(net_clone.parameters(),lr = 0.001),
              metrics_dict={"acc":Accuracy()})
 
-model_clone.load_ckpt("checkpoint.pt")
+model_clone.load_ckpt(ckpt_path)

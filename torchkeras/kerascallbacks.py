@@ -243,7 +243,7 @@ class VisMetric:
             figsize (tuple, optional): Figure size. Defaults to (6, 4)
             save_path (str, optional): Path to save the history plot. Defaults to 'history.png'
         """
-        self.figsize = (6, 4)
+        self.figsize = figsize
         self.save_path = save_path
         self.in_jupyter = is_jupyter()
 
@@ -372,12 +372,6 @@ class VisMetric:
             self.graph_out.update(self.graph_ax.figure)
         self.graph_fig.savefig(self.save_path)
         self.plt.close()
-
-
-from ipywidgets import Output
-import os
-import pandas as pd
-
 
 class VisDisplay:
     def __init__(self, display_fn, model=None, init_display=True, dis_period=1):

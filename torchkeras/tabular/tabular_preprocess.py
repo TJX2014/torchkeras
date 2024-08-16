@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler, QuantileTransformer, MinMaxSca
 from sklearn.impute import SimpleImputer
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import FeatureUnion, Pipeline
+from tqdm.auto import tqdm 
 
 class NumericPreprocessor(BaseEstimator, TransformerMixin):
     def __init__(self, numeric_features):
@@ -82,7 +83,7 @@ class EmbeddingPreprocessor(BaseEstimator, TransformerMixin):
 
     def fit(self, X, y=None):
         self.trans_max = {}
-        for col in self.embedding_features:
+        for col in tqdm(self.embedding_features):
             Xcol = self._fillna(X[col])
             self.trans_dics[col] = self._get_trans_dic(Xcol)
             self.trans_max[col] = max(list(self.trans_dics[col].values()))

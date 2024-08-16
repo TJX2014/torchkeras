@@ -24,6 +24,7 @@ from torchkeras.vlog import VLog
 
 try:
     from torchkeras.kerasmodel import KerasModel
+    from torchkeras import tabular
     from torchkeras.summary import summary, flop_summary
     from torchkeras.utils import seed_everything,printlog,colorful,delete_object
 except Exception as err:

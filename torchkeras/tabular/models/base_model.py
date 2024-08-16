@@ -5,7 +5,6 @@
 import importlib
 import warnings
 from abc import ABCMeta, abstractmethod
-from functools import partial
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
 
 import numpy as np
@@ -110,23 +109,6 @@ class BaseModel(nn.Module,metaclass=ABCMeta):
     def embed_input(self, x: Dict) -> torch.Tensor:
         return self.embedding_layer(x)
 
-    def apply_output_sigmoid_scaling(self, y_hat: torch.Tensor) -> torch.Tensor:
-        """Applies sigmoid scaling to the output of the model if the task is regression and the target range is
-        defined.
-
-        Args:
-            y_hat (torch.Tensor): The output of the model
-
-        Returns:
-            torch.Tensor: The output of the model with sigmoid scaling applied
-
-        """
-        if (self.hparams.task == "regression") and (self.hparams.target_range is not None):
-            for i in range(self.hparams.output_dim):
-                y_min, y_max = self.hparams.target_range[i]
-                y_hat[:, i] = y_min + nn.Sigmoid()(y_hat[:, i]) * (y_max - y_min)
-        return y_hat
-
     def pack_output(self, y_hat: torch.Tensor, backbone_features: torch.tensor) -> Dict[str, Any]:
         """Packs the output of the model.
 
@@ -156,7 +138,6 @@ class BaseModel(nn.Module,metaclass=ABCMeta):
 
         """
         y_hat = self.head(backbone_features)
-        y_hat = self.apply_output_sigmoid_scaling(y_hat)
         return self.pack_output(y_hat, backbone_features)
 
     def forward(self, x: Dict) -> Dict[str, Any]:
