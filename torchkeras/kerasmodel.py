@@ -6,7 +6,7 @@ import pandas as pd
 import torch
 
 """
-@author : lyhue1991，zhangyu
+@author : lyhue1991, zhangyu
 @description : keras core code
 """
 class StepRunner:
