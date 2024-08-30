@@ -4,7 +4,7 @@ from torch import nn
 import sys
 
 """
-@author : lyhue1991
+@author : lyhue1991, zhangyu
 @description : evaluating different metrics
 """
 class Accuracy(nn.Module):
