@@ -31,11 +31,11 @@ class TabularDataset(Dataset):
         if target:
             self.y = data[target].astype(np.float32).values
             if isinstance(target, str):
-                self.y = self.y.reshape(-1, 1)  # .astype(np.int64)
+                self.y = self.y.reshape(-1, 1)  
         else:
-            self.y = np.zeros((self.n, 1))  # .astype(np.int64)
+            self.y = np.zeros((self.n, 1))  
 
-        if task == "classification":
+        if task in ("multiclass","classification"):
             self.y = self.y.astype(np.int64)
         self.categorical_cols = categorical_cols if categorical_cols else []
         self.continuous_cols = continuous_cols if continuous_cols else []

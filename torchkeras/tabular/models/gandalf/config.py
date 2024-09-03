@@ -83,8 +83,3 @@ class GANDALFConfig(ModelConfig):
         assert self.gflu_stages > 0, "gflu_stages should be greater than 0"
         return super().__post_init__()
 
-
-if __name__ == "__main__":
-    from pytorch_tabular.utils import generate_doc_dataclass
-
-    print(generate_doc_dataclass(GANDALFConfig, desc="GANDALF Config"))

@@ -74,10 +74,6 @@ class TabNetBackbone(nn.Module):
 
 class TabNetModel(BaseModel):
     def __init__(self, config: DictConfig, **kwargs):
-        assert config.task in [
-            "regression",
-            "classification",
-        ], "TabNet is only implemented for Regression and Classification"
         super().__init__(config, **kwargs)
 
     @property

@@ -167,7 +167,3 @@ class TabTransformerConfig(ModelConfig):
     _backbone_name: str = field(default="TabTransformerBackbone")
     _config_name: str = field(default="TabTransformerConfig")
 
-
-# if __name__ == "__main__":
-#     from pytorch_tabular.utils import generate_doc_dataclass
-#     print(generate_doc_dataclass(TabTransformerConfig))

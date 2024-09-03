@@ -15,7 +15,9 @@ def get_inferred_config(ds):
     continuous_dim = len(ds.continuous_cols)
     if ds.task == "regression":
         output_dim = len(ds.target) if ds.target else None
-    elif ds.task == "classification":
+    elif ds.task == "binary":
+        output_dim = 1
+    elif ds.task in ("multiclass","classification"):
         output_dim = len(np.unique(ds.data[ds.target[0]])) if ds.target else None
     else:
         raise ValueError(f"{ds.task} is an unsupported task.")
@@ -218,8 +220,9 @@ class ModelConfig:
     def __post_init__(self):
         if self.task == "regression":
             self.loss = self.loss or "MSELoss"
-            
-        elif self.task == "classification":
+        elif self.task =='binary':
+            self.loss = self.loss or 'BCEWithLogitsLoss'
+        elif self.task in ("multiclass","classification"):
             self.loss = self.loss or "CrossEntropyLoss"
         else:
             raise NotImplementedError(
