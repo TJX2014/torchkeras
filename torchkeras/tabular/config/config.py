@@ -17,6 +17,9 @@ def get_inferred_config(ds):
         output_dim = len(ds.target) if ds.target else None
     elif ds.task == "binary":
         output_dim = 1
+        if ds.target:
+            target_values = set(np.unique(ds.data[ds.target[0]].astype(int)))
+            assert  target_values == {0,1}, f'not valid targets: {target_values}'
     elif ds.task in ("multiclass","classification"):
         output_dim = len(np.unique(ds.data[ds.target[0]])) if ds.target else None
     else:

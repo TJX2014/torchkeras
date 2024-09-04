@@ -22,6 +22,11 @@ torchkeras/ocr/__pycache__/
 *.pyc
 torchkeras/chat/__pycache__/
 torchkeras/tools/__pycache__/
+examples/*.zip 
+examples/*.pt
+examples/checkpoint
+examples/*.parquet 
+examples/*.png
 examples/.ipynb_checkpoints
 examples/__pycache__/
 torchkeras/chat/__pycache__/

@@ -17,7 +17,7 @@ class TabularDataset(Dataset):
         Args:
             data (pd.DataFrame): Pandas DataFrame to load during training
             task (str):
-                Whether it is a classification or regression task. If classification, it returns a LongTensor as target
+                It is a regression/binary/multilass  task. If multilass, it returns a LongTensor as target
             continuous_cols (List[str], optional): A list of names of continuous columns. Defaults to None.
             categorical_cols (List[str], optional): A list of names of categorical columns.
                 These columns must be ordinal encoded beforehand. Defaults to None.
@@ -37,6 +37,7 @@ class TabularDataset(Dataset):
 
         if task in ("multiclass","classification"):
             self.y = self.y.astype(np.int64)
+   
         self.categorical_cols = categorical_cols if categorical_cols else []
         self.continuous_cols = continuous_cols if continuous_cols else []
 

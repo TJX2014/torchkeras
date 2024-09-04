@@ -7,7 +7,10 @@ from . import (
     gate,
     node,
     tab_transformer,
-    tabnet
+    tabnet,
+    fm,
+    deepfm,
+    deepcross
 )
 
 from .autoint import AutoIntConfig, AutoIntModel
@@ -20,35 +23,60 @@ from .gate import GatedAdditiveTreeEnsembleConfig, GatedAdditiveTreeEnsembleMode
 from .node import NODEConfig, NODEModel
 from .tab_transformer import TabTransformerConfig, TabTransformerModel
 from .tabnet import TabNetModel, TabNetModelConfig
+from .fm import FMModel, FMConfig
+from .deepfm import DeepFMModel, DeepFMConfig
+from .deepcross import DeepCrossModel, DeepCrossConfig 
+
 
 __all__ = [
+    "BaseModel",
+    
     "CategoryEmbeddingModel",
     "CategoryEmbeddingModelConfig",
+    "category_embedding",
+    
     "NODEModel",
     "NODEConfig",
+    "node",
+    
     "TabNetModel",
     "TabNetModelConfig",
-    "BaseModel",
+    "tabnet",
+    
     "AutoIntConfig",
     "AutoIntModel",
+    "autoint",
+    
     "TabTransformerConfig",
     "TabTransformerModel",
+    "tab_transformer",
+    
     "FTTransformerConfig",
     "FTTransformerModel",
+    "ft_transformer",
+    
     "GatedAdditiveTreeEnsembleConfig",
     "GatedAdditiveTreeEnsembleModel",
+    "gate",
+    
     "GANDALFConfig",
     "GANDALFModel",
     "GANDALFBackbone",
+    "gandalf",
+    
     "DANetConfig",
     "DANetModel",
-    "category_embedding",
-    "node",
-    "tabnet",
-    "autoint",
-    "ft_transformer",
-    "tab_transformer",
-    "gate",
-    "gandalf",
     "danet",
+
+    "FMConfig",
+    "FMModel",    
+    "fm",
+
+    "DeepFMConfig",
+    "DeepFMModel",
+    "deepfm",
+
+    "DeepCrossConfig",
+    "DeepCrossModel",
+    "deepcross"
 ]

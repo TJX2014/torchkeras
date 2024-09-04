@@ -209,8 +209,9 @@ class KerasModel(torch.nn.Module):
         Args:
             ckpt_path: Path to the checkpoint
         """
-        self.net.load_state_dict(torch.load(ckpt_path if ckpt_path is not None else self.ckpt_path,
-                                            map_location='cpu'))
+        net_dict = torch.load(ckpt_path if ckpt_path is not None else self.ckpt_path,
+                               map_location='cpu', weights_only=True)
+        self.net.load_state_dict(net_dict)
         self.from_scratch = False
 
     def forward(self, x):
