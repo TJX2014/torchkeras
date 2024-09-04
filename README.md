@@ -322,6 +322,9 @@ examples目录下的范例库包括了使用torchkeras对一些非常常用的�
 |**Tabular**|||
 |二分类——LightGBM |- |[LightGBM](./examples/LightGBM二分类.ipynb)|
 |多分类——FTTransformer🔥🔥🔥🔥🔥|- |[FTTransformer](./examples/FTTransformer多分类.ipynb)|
+|二分类——FM|- |[FM](./examples/FM二分类.ipynb)|
+|二分类——DeepFM|- |[DeepFM](./examples/DeepFM二分类.ipynb)|
+|二分类——DeepCross|- |[DeepCross](./examples/DeepCross二分类.ipynb)|
 ||||
 |**CV**|||
 |图片分类——Resnet|  -  | [Resnet](./examples/ResNet.ipynb) |

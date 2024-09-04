@@ -155,6 +155,9 @@ KerasModel. Here are some examples.
 |**Tabular**|||
 |BinaryClassification——LightGBM |- |[LightGBM](./examples/LightGBM二分类.ipynb)|
 |MultiClassification——FTTransformer🔥🔥🔥🔥🔥|- |[FTTransformer](./examples/FTTransformer多分类.ipynb)|
+|BinaryClassification——FM|- |[FM](./examples/FM二分类.ipynb)|
+|BinaryClassification——DeepFM|- |[DeepFM](./examples/DeepFM二分类.ipynb)|
+|BinaryClassification——DeepCross|- |[DeepCross](./examples/DeepCross二分类.ipynb)|
 ||||
 |**CV**|||
 |ImageClassification——Resnet|  -  | [Resnet](./examples/ResNet.ipynb) |

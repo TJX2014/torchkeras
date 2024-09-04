@@ -15,6 +15,7 @@ __pycache__
 examples/*.pt
 examples/*.png
 examples/*.md 
+examples/*.zip
 examples/*.parquet
 examples/wandb/
 torchkeras/ocr/__pycache__/
