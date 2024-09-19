@@ -227,8 +227,8 @@ class KerasModel(torch.nn.Module):
         return self.net.forward(x)
 
     def fit(self, train_data, val_data=None, epochs=10, ckpt_path='checkpoint',
-            patience=5, monitor="val_loss", mode="min", callbacks=None,
-            plot=True, wandb=False, quiet=None,
+            patience=5, monitor="val_loss", mode="min", 
+            callbacks=None, plot=True, wandb=False, 
             mixed_precision='no', cpu=False, gradient_accumulation_steps=1):
         """
         Train the model.
@@ -244,7 +244,6 @@ class KerasModel(torch.nn.Module):
             callbacks: List of callback functions
             plot: Whether to plot training progress
             wandb: Whether to use WandB for logging
-            quiet: Whether to suppress training progress logs
             mixed_precision: Mixed precision training ('no', 'O1', 'O2', 'O3')
             cpu: Use CPU for training
             gradient_accumulation_steps: Number of steps to accumulate gradients before optimizer step
@@ -281,6 +280,7 @@ class KerasModel(torch.nn.Module):
         self.history = {}
         callbacks = callbacks if callbacks is not None else []
 
+        
         if bool(plot):
             from torchkeras.kerascallbacks import VisProgress, VisMetric
             callbacks = [VisMetric(), VisProgress()] + callbacks
@@ -296,17 +296,10 @@ class KerasModel(torch.nn.Module):
             [cb.on_fit_start(model=self) for cb in self.callbacks if hasattr(cb, 'on_fit_start')]
 
         start_epoch = 1 if self.from_scratch else 0
-
-        if bool(plot) or quiet is None:
-            quiet = True
-
-        quiet_fn = (lambda epoch: quiet) if isinstance(quiet, bool) else (
-            (lambda epoch: epoch > quiet) if isinstance(quiet, int) else quiet)
-
+        quiet = bool(plot)
+        
         for epoch in range(start_epoch, epochs + 1):
-            should_quiet = quiet_fn(epoch)
-
-            if not should_quiet:
+            if not quiet:
                 nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 self.accelerator.print("\n" + "==========" * 8 + "%s" % nowtime)
                 self.accelerator.print("Epoch {0} / {1}".format(epoch, epochs) + "\n")
@@ -323,7 +316,7 @@ class KerasModel(torch.nn.Module):
                 **self.kwargs
             )
 
-            train_epoch_runner = self.EpochRunner(train_step_runner, should_quiet)
+            train_epoch_runner = self.EpochRunner(train_step_runner, quiet)
             train_metrics = {'epoch': epoch}
             train_metrics.update(train_epoch_runner(train_dataloader))
 
@@ -343,7 +336,7 @@ class KerasModel(torch.nn.Module):
                     metrics_dict= deepcopy(self.metrics_dict),
                     **self.kwargs
                 )
-                val_epoch_runner = self.EpochRunner(val_step_runner,should_quiet)
+                val_epoch_runner = self.EpochRunner(val_step_runner,quiet)
                 with torch.no_grad():
                     val_metrics = val_epoch_runner(val_dataloader)
 
@@ -361,7 +354,7 @@ class KerasModel(torch.nn.Module):
 
             if best_score_idx==len(arr_scores)-1 and self.accelerator.is_local_main_process:
                 self.save_ckpt(ckpt_path,accelerator = self.accelerator)
-                if not should_quiet:
+                if not quiet:
                     self.accelerator.print(colorful("<<<<<< reach best {0} : {1} >>>>>>".format(
                         monitor,arr_scores[best_score_idx])))
 
@@ -388,7 +381,7 @@ class KerasModel(torch.nn.Module):
         Args:
             val_data: Validation data
             quiet: Whether to suppress evaluation progress logs
-
+            
         Returns:
             Dictionary of evaluation metrics
         """
@@ -419,8 +412,8 @@ class KerasModel(torch.nn.Module):
     def fit_ddp(self, num_processes, train_data,
                 val_data=None, epochs=10, ckpt_path='checkpoint',
                 patience=5, monitor="val_loss", mode="min", callbacks=None,
-                plot=True, wandb=False, quiet=None,
-                mixed_precision='no', cpu=False, gradient_accumulation_steps=1):
+                plot=True, wandb=False, mixed_precision='no', 
+                cpu=False, gradient_accumulation_steps=1):
         """
         Distributed Data Parallel (DDP) training for the model.
 
@@ -436,7 +429,6 @@ class KerasModel(torch.nn.Module):
             callbacks: List of callback functions
             plot: Whether to plot training progress
             wandb: Whether to use WandB for logging
-            quiet: Whether to suppress training progress logs
             mixed_precision: Mixed precision training ('no', 'O1', 'O2', 'O3')
             cpu: Use CPU for training
             gradient_accumulation_steps: Number of steps to accumulate gradients before optimizer step
@@ -446,7 +438,7 @@ class KerasModel(torch.nn.Module):
 
         # Create a tuple of arguments for the fit method
         args = (train_data, val_data, epochs, ckpt_path, patience, monitor, mode,
-                callbacks, plot, wandb, quiet, mixed_precision, cpu, gradient_accumulation_steps)
+                callbacks, plot, wandb, mixed_precision, cpu, gradient_accumulation_steps)
 
         # Launch the fit method using notebook_launcher
         notebook_launcher(self.fit, args, num_processes=num_processes)
