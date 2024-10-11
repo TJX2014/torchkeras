@@ -12,6 +12,7 @@ class TabularDataset(Dataset):
         continuous_cols: List[str] = None,
         categorical_cols: List[str] = None,
         target: List[str] = None,
+        start_id: int = 0,
     ):
         """Dataset to Load Tabular Data.
 
@@ -29,6 +30,7 @@ class TabularDataset(Dataset):
         self.task = task
         self.n = data.shape[0]
         self.target = target
+        self.ids = np.arange(start_id,start_id+self.n)
         if target:
             self.y = data[target].astype(np.float32).values
             if isinstance(target, str):
@@ -74,8 +76,16 @@ class TabularDataset(Dataset):
     def __getitem__(self, idx):
         """Generates one sample of data."""
         return {
-            "target": self.y[idx],
-            "continuous": (self.continuous_X[idx] if self.continuous_cols else torch.Tensor()),
-            "categorical": (self.categorical_X[idx] if self.categorical_cols else torch.Tensor()),
+            "target": torch.tensor(self.y[idx]),
+            "continuous": (torch.tensor(self.continuous_X[idx]) if self.continuous_cols else torch.Tensor()),
+            "categorical": (torch.tensor(self.categorical_X[idx]) if self.categorical_cols else torch.Tensor()),
+            "id": torch.tensor(self.ids[idx],dtype=torch.long),
         }
-        
+    def get_batch(self, batch_ids):
+        batch = {
+            "target": torch.tensor(self.y[batch_ids]),
+            "continuous": (torch.tensor(self.continuous_X[batch_ids]) if self.continuous_cols else torch.Tensor()),
+            "categorical": (torch.tensor(self.categorical_X[batch_ids]) if self.categorical_cols else torch.Tensor()),
+            "id": torch.tensor(self.ids[batch_ids],dtype=torch.long),
+        }
+        return batch 
